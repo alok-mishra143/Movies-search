@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import React from "react";
 
 const Search = ({ SearchTerm, setSearchTerm }) => {
   return (
@@ -16,4 +17,4 @@ const Search = ({ SearchTerm, setSearchTerm }) => {
   );
 };
 
-export default Search;
+export default React.memo(Search);

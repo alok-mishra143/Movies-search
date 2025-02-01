@@ -1,3 +1,5 @@
+import React from "react";
+
 const Spinner = () => {
   return (
     <div role="status">
@@ -21,4 +23,4 @@ const Spinner = () => {
     </div>
   );
 };
-export default Spinner;
+export default React.memo(Spinner);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
 import MovieCard from "./components/MovieCard.jsx";
@@ -18,7 +18,7 @@ const API_OPTIONS = {
   },
 };
 
-const App = () => {
+export const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [movieList, setMovieList] = useState([]);
@@ -29,7 +29,7 @@ const App = () => {
 
   // Debounce the search term to prevent making too many API requests
   // by waiting for the user to stop typing for 500ms
-  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 700);
 
   const fetchMovies = async (query = "") => {
     setIsLoading(true);
@@ -91,13 +91,18 @@ const App = () => {
 
       <div className="wrapper">
         <header>
-          <img src="./hero.png" alt="Hero Banner" />
+          <img
+            src="./hero.png"
+            alt="Hero Banner"
+            loading="lazy"
+            decoding="async"
+          />
           <h1>
             Find <span className="text-gradient">Movies</span> You&apos;ll Enjoy
             Without the Hassle
           </h1>
 
-          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <MemoSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
         {trendingMovies.length > 0 && (
@@ -119,13 +124,13 @@ const App = () => {
           <h2>All Movies</h2>
 
           {isLoading ? (
-            <Spinner />
+            <MemoSpinner />
           ) : errorMessage ? (
             <p className="text-red-500">{errorMessage}</p>
           ) : (
             <ul>
               {movieList.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
+                <MemoMovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
@@ -135,4 +140,8 @@ const App = () => {
   );
 };
 
-export default App;
+const MemoSpinner = React.memo(Spinner);
+const MemoSearch = React.memo(Search);
+const MemoMovieCard = React.memo(MovieCard);
+
+export default React.memo(App);
